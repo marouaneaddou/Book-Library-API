@@ -2,13 +2,19 @@ package com.marouane.book_library_api.controllers;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marouane.book_library_api.domain.AuthorEntity;
+import com.marouane.book_library_api.dtos.author.AuthorResponseDetailsDto;
 import com.marouane.book_library_api.dtos.author.AuthorResponseDto;
 import com.marouane.book_library_api.dtos.author.CreateAuthorDto;
 import com.marouane.book_library_api.mappers.AuthorMapper;
@@ -26,10 +32,21 @@ public class AuthorController {
         this.authorService = authorService;
         this.authorMapper = authorMapper;
     }
+
     @PostMapping
-    public ResponseEntity<AuthorResponseDto> createAuthor(@Valid @RequestBody CreateAuthorDto authorDto ) {
+    public ResponseEntity<AuthorResponseDetailsDto> createAuthor(@Valid @RequestBody CreateAuthorDto authorDto ) {
         AuthorEntity auther = this.authorMapper.toEntity( authorDto );
         AuthorEntity savedAutherEntity = this.authorService.createAuthor( auther );
-        return ResponseEntity.status(HttpStatus.CREATED).body(authorMapper.toDto(savedAutherEntity));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authorMapper.toDetailsResponse(savedAutherEntity));
+    }
+
+    @GetMapping
+    public List<AuthorResponseDto> listAuthers( ) {
+
+        List<AuthorEntity> authers = this.authorService.findAll();
+
+        return authers.stream()
+            .map( author -> authorMapper.toResponse(author) )
+            .toList();
     }
 }

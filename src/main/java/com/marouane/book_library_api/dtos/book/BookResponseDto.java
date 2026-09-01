@@ -1,4 +1,4 @@
-package com.marouane.book_library_api.dtos.author;
+package com.marouane.book_library_api.dtos.book;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorResponseDto {
-    private Long id;
-    private String name;
+public class BookResponseDto {
+    private String isbn;
+    private String title;
 }
+

@@ -1,5 +1,7 @@
 package com.marouane.book_library_api.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.marouane.book_library_api.domain.AuthorEntity;
@@ -16,4 +18,8 @@ public class AuthorService {
         AuthorEntity auther = this.authorRepository.save( authorEntity );
         return auther;
     };
+
+    public List<AuthorEntity> findAll( ) {
+        return this.authorRepository.findAll(  );
+    }
 }
