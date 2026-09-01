@@ -1,4 +1,5 @@
 package com.marouane.book_library_api.domain;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,9 +11,16 @@ import jakarta.persistence.Table;
 import java.util.List;
 import java.util.ArrayList;
 
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name= "authors")
-public class Auther {
+public class AuthorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_seq")
     private Long id;
@@ -21,5 +29,9 @@ public class Auther {
 
     @OneToMany
     @JoinColumn( name = "author" )
-    private List<Book> books = new ArrayList<>();
+    private List<BookEntity> books = new ArrayList<>();
+
+    public AuthorEntity(String name) {
+        this.name = name;
+    }
 }

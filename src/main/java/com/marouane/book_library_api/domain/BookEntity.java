@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name ="books")
-public class Book {
+public class BookEntity {
     @Id
     private String isbn;
 
@@ -16,5 +16,5 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private  Auther author;
+    private  AuthorEntity author;
 }
