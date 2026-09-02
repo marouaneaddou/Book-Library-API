@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.marouane.book_library_api.commands.author.UpdateAuthorCommand;
 import com.marouane.book_library_api.domain.AuthorEntity;
 import com.marouane.book_library_api.dtos.author.AuthorResponseDto;
 import com.marouane.book_library_api.dtos.book.BookResponseDto;
 import com.marouane.book_library_api.dtos.author.CreateAuthorDto;
-
+import com.marouane.book_library_api.dtos.author.UpdateAuthorRequest;
 import com.marouane.book_library_api.dtos.author.AuthorResponseDetailsDto;
 
 @Component
@@ -32,5 +33,9 @@ public class AuthorMapper {
             author.getName(),
             books
         );
+    }
+
+    public UpdateAuthorCommand toCommand( UpdateAuthorRequest update ) {
+        return new UpdateAuthorCommand( update.getName() );
     }
 }

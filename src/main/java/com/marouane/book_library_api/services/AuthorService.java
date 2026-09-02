@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.marouane.book_library_api.commands.author.UpdateAuthorCommand;
 import com.marouane.book_library_api.domain.AuthorEntity;
 import com.marouane.book_library_api.exceptions.NotFoundException;
 import com.marouane.book_library_api.repositories.AuthorRepository;
@@ -18,8 +19,8 @@ public class AuthorService {
     }
     
     public AuthorEntity createAuthor( AuthorEntity authorEntity ) {
-        AuthorEntity auther = this.authorRepository.save( authorEntity );
-        return auther;
+        AuthorEntity author = this.authorRepository.save( authorEntity );
+        return author;
     };
 
     public List<AuthorEntity> findAll( ) {
@@ -28,9 +29,17 @@ public class AuthorService {
 
     public AuthorEntity findOne( Long id ) {
         // Optional<AuthorEntity> auther = this.authorRepository.findById( id );
-        // return auther;
-        AuthorEntity auther = this.authorRepository.findById( id )
+        // return author;
+        AuthorEntity author = this.authorRepository.findById( id )
             .orElseThrow(() -> new NotFoundException( "Author not found"));
-        return auther;
+        return author;
+    }
+
+    public AuthorEntity updateOne( Long id, UpdateAuthorCommand update  ) {
+        AuthorEntity author = this.authorRepository.findById( id )
+            .orElseThrow(() -> new NotFoundException( "Author not found"));
+        
+        author.setName( update.getName());
+        return this.authorRepository.save( author );
     }
 }
