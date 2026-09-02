@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateBookDto {
+public class CreateBookRequest {
     @NotBlank(message = "Name cannot be empty or just spaces")
     private String isbn;
     @NotBlank(message = "Name cannot be empty or just spaces")

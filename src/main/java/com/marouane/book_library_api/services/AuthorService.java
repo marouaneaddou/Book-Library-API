@@ -14,6 +14,7 @@ public class AuthorService {
     public AuthorService( AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
+    
     public AuthorEntity createAuthor( AuthorEntity authorEntity ) {
         AuthorEntity auther = this.authorRepository.save( authorEntity );
         return auther;
