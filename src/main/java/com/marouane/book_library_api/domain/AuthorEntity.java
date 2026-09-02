@@ -1,11 +1,9 @@
 package com.marouane.book_library_api.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
@@ -27,8 +25,7 @@ public class AuthorEntity {
 
     private String name;
 
-    @OneToMany
-    @JoinColumn( name = "author" )
+    @OneToMany( mappedBy = "author")
     private List<BookEntity> books = new ArrayList<>();
 
     public AuthorEntity(String name) {

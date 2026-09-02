@@ -19,15 +19,15 @@ public class BookMapper {
     public BookMapper( AuthorMapper autherMapper ) {
         this.autherMapper = autherMapper;
     }
-    public CreateBookCommand toCommand( CreateBookRequest bookDto ) {
-        return new CreateBookCommand( bookDto.getIsbn(), 
-            bookDto.getTitle(), 
-            bookDto.getAuthorId()
+    public CreateBookCommand toCommand( CreateBookRequest bookRequest ) {
+        return new CreateBookCommand( bookRequest.getIsbn(), 
+            bookRequest.getTitle(), 
+            bookRequest.getAuthorId()
         );
     }
 
     public BookResponseDetailsDto toDetailsResponse( BookEntity book ) {
-        AuthorResponseDto author = this.autherMapper.toResponse(book.getAuthor());
+        AuthorResponseDto author = this.autherMapper.toResponse( book.getAuthor() );
 
         return new BookResponseDetailsDto( 
             book.getIsbn(),

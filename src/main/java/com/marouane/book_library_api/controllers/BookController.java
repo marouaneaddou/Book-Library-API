@@ -35,8 +35,10 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookResponseDetailsDto> createBook(@Valid @RequestBody CreateBookRequest book ) {
         CreateBookCommand bookCommand = this.bookMapper.toCommand( book );
-        BookEntity saveBook = this.bookService.create(bookCommand);
-        return ResponseEntity.status( HttpStatus.CREATED ).body( this.bookMapper.toDetailsResponse(saveBook) );
+        BookEntity saveBook = this.bookService.create( bookCommand );
+        return ResponseEntity
+            .status( HttpStatus.CREATED )
+            .body( this.bookMapper.toDetailsResponse( saveBook ) );
     }
 
     @GetMapping
