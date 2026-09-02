@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookResponseDetailsDto> createBook(@Valid @RequestBody CreateBookRequest book ) {
+    public ResponseEntity<BookResponseDetailsDto> createBook( @Valid @RequestBody CreateBookRequest book ) {
         CreateBookCommand bookCommand = this.bookMapper.toCommand( book );
         BookEntity saveBook = this.bookService.create( bookCommand );
         return ResponseEntity
@@ -48,5 +49,11 @@ public class BookController {
         return books.stream()
             .map( book -> this.bookMapper.toResponse(book))
             .toList();
+    }
+
+    @GetMapping("/{isbn}")
+    public BookResponseDetailsDto getBook( @PathVariable("isbn") String isbn ) {
+        BookEntity findOne = this.bookService.findOne( isbn );
+        return this.bookMapper.toDetailsResponse(findOne);
     }
  }

@@ -48,5 +48,11 @@ public class BookService {
 
     public List<BookSummary> findAll( ) {
         return this.bookRepository.findAllBook();
-    } 
+    }
+
+    public BookEntity findOne( String isbn ) {
+        BookEntity book = this.bookRepository.findById( isbn )
+            .orElseThrow(() -> new NotFoundException( "book not found"));
+        return book;
+    }
 }
