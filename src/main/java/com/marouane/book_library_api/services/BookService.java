@@ -1,5 +1,6 @@
 package com.marouane.book_library_api.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.marouane.book_library_api.repositories.AuthorRepository;
 import com.marouane.book_library_api.repositories.BookRepository;
 import com.marouane.book_library_api.exceptions.ConflictException;
 import com.marouane.book_library_api.exceptions.NotFoundException;
+import com.marouane.book_library_api.projections.BookSummary;
 
 @Service
 public class BookService {
@@ -43,4 +45,8 @@ public class BookService {
         // save book
         return this.bookRepository.save( bookEntity );
     };
+
+    public List<BookSummary> findAll( ) {
+        return this.bookRepository.findAllBook();
+    } 
 }
