@@ -39,7 +39,11 @@ public class AuthorService {
         AuthorEntity author = this.authorRepository.findById( id )
             .orElseThrow(() -> new NotFoundException( "Author not found"));
         
-        author.setName( update.getName());
+        author.setName( update.getName() );
         return this.authorRepository.save( author );
+    }
+
+    public boolean isExists( Long id ) {
+        return this.authorRepository.existsById( id );
     }
 }

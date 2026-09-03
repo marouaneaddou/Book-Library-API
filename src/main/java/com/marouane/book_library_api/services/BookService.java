@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.marouane.book_library_api.commands.book.CreateBookCommand;
+import com.marouane.book_library_api.commands.book.UpdateBookCommand;
 import com.marouane.book_library_api.domain.AuthorEntity;
 import com.marouane.book_library_api.domain.BookEntity;
 import com.marouane.book_library_api.dtos.book.BookResponseDto;
@@ -54,5 +55,19 @@ public class BookService {
         BookEntity book = this.bookRepository.findById( isbn )
             .orElseThrow(() -> new NotFoundException( "book not found"));
         return book;
+    }
+
+    public boolean isExists( String isbn ) {
+        return this.bookRepository.existsById( isbn );
+    }
+
+    public BookEntity update( UpdateBookCommand command ) {
+        BookEntity book =
+                        bookRepository.getReferenceById( command.getIsbn() );
+        AuthorEntity author =
+                        authorRepository.getReferenceById(command.getAuthorId());
+        book.setTitle( command.getTitle() );
+        book.setAuthor( author );
+        return this.bookRepository.save( book );
     }
 }

@@ -7,8 +7,10 @@ import com.marouane.book_library_api.dtos.author.AuthorResponseDto;
 import com.marouane.book_library_api.dtos.book.BookResponseDetailsDto;
 import com.marouane.book_library_api.dtos.book.BookResponseDto;
 import com.marouane.book_library_api.dtos.book.CreateBookRequest;
+import com.marouane.book_library_api.dtos.book.UpdateBookRequest;
 import com.marouane.book_library_api.projections.BookSummary;
 import com.marouane.book_library_api.commands.book.CreateBookCommand;
+import com.marouane.book_library_api.commands.book.UpdateBookCommand;
 import com.marouane.book_library_api.domain.BookEntity;
 
 @Component
@@ -23,6 +25,14 @@ public class BookMapper {
         return new CreateBookCommand( bookRequest.getIsbn(), 
             bookRequest.getTitle(), 
             bookRequest.getAuthorId()
+        );
+    }
+
+    public UpdateBookCommand toUpdateCommand( UpdateBookRequest updateBookRequest, String isbn ) {
+        return new UpdateBookCommand(
+            isbn,
+            updateBookRequest.getTitle(),
+            updateBookRequest.getAuthorId()
         );
     }
 

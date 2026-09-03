@@ -70,7 +70,9 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorResponseDto> updateAuthor( @Valid @RequestBody UpdateAuthorRequest updateRequest, @PathVariable("id") Long id ) {
+    public ResponseEntity<AuthorResponseDto> updateAuthor( @Valid 
+        @RequestBody UpdateAuthorRequest updateRequest, 
+        @PathVariable("id") Long id ) {
         UpdateAuthorCommand command = this.authorMapper.toCommand( updateRequest );
         AuthorEntity updateAuthor = this.authorService.updateOne( id, command );
         return ResponseEntity
