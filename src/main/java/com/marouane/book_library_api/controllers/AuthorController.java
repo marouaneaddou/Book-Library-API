@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import com.marouane.book_library_api.dtos.author.CreateAuthorDto;
 import com.marouane.book_library_api.dtos.author.UpdateAuthorRequest;
 import com.marouane.book_library_api.mappers.AuthorMapper;
 import com.marouane.book_library_api.services.AuthorService;
+import com.marouane.book_library_api.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -37,12 +39,12 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorResponseDetailsDto> createAuthor(@Valid @RequestBody CreateAuthorDto authorDto ) {
+    public ResponseEntity<AuthorResponseDto> createAuthor(@Valid @RequestBody CreateAuthorDto authorDto ) {
         AuthorEntity author = this.authorMapper.toEntity( authorDto );
         AuthorEntity savedAutherEntity = this.authorService.createAuthor( author );
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body( this.authorMapper.toDetailsResponse( savedAutherEntity ) );
+            .body( this.authorMapper.toResponse( savedAutherEntity ) );
     }
 
     @GetMapping
@@ -77,5 +79,14 @@ public class AuthorController {
         return ResponseEntity
             .status(200)
             .body( this.authorMapper.toResponse( updateAuthor ) );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAuthor( @PathVariable("id") long id ) {
+        // is exists
+        // boolean exists = this.authorService.isExists( id );
+        // if ( !exists ) throw new NotFoundException( "Author does not exists" );
+        this.authorService.delete( id );
+        return ResponseEntity.noContent().build();
     }
 }

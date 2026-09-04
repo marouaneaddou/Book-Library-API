@@ -10,7 +10,6 @@ import com.marouane.book_library_api.commands.book.UpdateBookCommand;
 import com.marouane.book_library_api.domain.AuthorEntity;
 import com.marouane.book_library_api.domain.BookEntity;
 import com.marouane.book_library_api.services.AuthorService;
-import com.marouane.book_library_api.repositories.AuthorRepository;
 import com.marouane.book_library_api.repositories.BookRepository;
 import com.marouane.book_library_api.exceptions.ConflictException;
 import com.marouane.book_library_api.exceptions.NotFoundException;
@@ -22,7 +21,6 @@ public class BookService {
     private final AuthorService    authorService;
 
     public BookService( BookRepository bookRepository,
-        AuthorRepository authorRepository,
         AuthorService authorService ) {
         this.bookRepository     = bookRepository;
         this.authorService      = authorService;
@@ -54,7 +52,7 @@ public class BookService {
 
     public BookEntity findOne( String isbn ) {
         BookEntity book = this.bookRepository.findById( isbn )
-            .orElseThrow(() -> new NotFoundException( "book not found"));
+            .orElseThrow(() -> new NotFoundException( "book does not exists" ));
         return book;
     }
 
@@ -83,5 +81,12 @@ public class BookService {
         };
         // save new data and returned
         return this.bookRepository.save( book );
+    }
+
+    public void delete( String isbn ) {
+        // find book
+        BookEntity book = this.findOne( isbn );
+        // System.out.println( book );
+        this.bookRepository.delete( book );
     }
 }

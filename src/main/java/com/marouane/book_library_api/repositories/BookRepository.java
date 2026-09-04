@@ -18,4 +18,6 @@ public interface BookRepository extends JpaRepository<BookEntity, String>{
     """
     )
     List<BookSummary> findAllBook();
+
+    boolean existsByAuthorId(Long authorId);
 }

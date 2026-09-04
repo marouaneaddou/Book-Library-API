@@ -6,15 +6,21 @@ import org.springframework.stereotype.Service;
 
 import com.marouane.book_library_api.commands.author.UpdateAuthorCommand;
 import com.marouane.book_library_api.domain.AuthorEntity;
+import com.marouane.book_library_api.exceptions.AuthorHasBooksException;
 import com.marouane.book_library_api.exceptions.NotFoundException;
 import com.marouane.book_library_api.repositories.AuthorRepository;
+import com.marouane.book_library_api.repositories.BookRepository;
 
 @Service
 public class AuthorService {
 
     AuthorRepository authorRepository;
-    public AuthorService( AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
+    BookRepository     bookRepository;
+    public AuthorService( AuthorRepository authorRepository,
+        BookRepository bookRepository
+    ) {
+        this.authorRepository   = authorRepository;
+        this.bookRepository        = bookRepository;
     }
     
     public AuthorEntity createAuthor( AuthorEntity authorEntity ) {
@@ -44,5 +50,16 @@ public class AuthorService {
 
     public boolean isExists( Long id ) {
         return this.authorRepository.existsById( id );
+    }
+
+    public void delete( Long id ) {
+        // find author
+        AuthorEntity author = this.findOne( id );
+        // if ( !exists ) throw new NotFoundException( "Author does not exists" );
+        // check author has books
+        boolean hasBooks = this.bookRepository.existsByAuthorId( id );
+        if ( hasBooks ) throw new AuthorHasBooksException( );
+        // delete author
+        this.authorRepository.delete( author );
     }
 }
