@@ -1,15 +1,15 @@
 package com.marouane.book_library_api.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.marouane.book_library_api.commands.book.CreateBookCommand;
+import com.marouane.book_library_api.commands.book.PartialUpdateCommand;
 import com.marouane.book_library_api.commands.book.UpdateBookCommand;
 import com.marouane.book_library_api.domain.AuthorEntity;
 import com.marouane.book_library_api.domain.BookEntity;
-import com.marouane.book_library_api.dtos.book.BookResponseDto;
+import com.marouane.book_library_api.services.AuthorService;
 import com.marouane.book_library_api.repositories.AuthorRepository;
 import com.marouane.book_library_api.repositories.BookRepository;
 import com.marouane.book_library_api.exceptions.ConflictException;
@@ -18,18 +18,19 @@ import com.marouane.book_library_api.projections.BookSummary;
 
 @Service
 public class BookService {
-    private BookRepository bookRepository;
-    private AuthorRepository authorRepository;
+    private final BookRepository  bookRepository;
+    private final AuthorService    authorService;
 
-    public BookService( BookRepository bookRepository, AuthorRepository authorRepository ) {
-        this.bookRepository = bookRepository;
-        this.authorRepository = authorRepository;
+    public BookService( BookRepository bookRepository,
+        AuthorRepository authorRepository,
+        AuthorService authorService ) {
+        this.bookRepository     = bookRepository;
+        this.authorService      = authorService;
     }
 
     public BookEntity create( CreateBookCommand bookCommand ) {
         // find author
-        AuthorEntity author = this.authorRepository.findById( bookCommand.getAuthorId() )
-            .orElseThrow( () -> new NotFoundException( "Author not found") );
+        AuthorEntity author = this.authorService.findOne( bookCommand.getAuthorId() );
         
         // check duplication
         if ( this.bookRepository.existsById( bookCommand.getIsbn() ) ) {
@@ -65,9 +66,22 @@ public class BookService {
         BookEntity book =
                         bookRepository.getReferenceById( command.getIsbn() );
         AuthorEntity author =
-                        authorRepository.getReferenceById(command.getAuthorId());
+                        this.authorService.findOne( command.getAuthorId() );
         book.setTitle( command.getTitle() );
         book.setAuthor( author );
+        return this.bookRepository.save( book );
+    }
+
+    public BookEntity partialUpdate( PartialUpdateCommand command ) {
+        // get book reference
+        BookEntity book = this.bookRepository.getReferenceById(command.getIsbn());
+        // check if title and authorId exists
+        if ( command.getTitle() != null ) book.setTitle( command.getTitle() );
+        if ( command.getAuthorId() != null ) {
+            AuthorEntity author = this.authorService.findOne( command.getAuthorId() );
+            book.setAuthor( author );
+        };
+        // save new data and returned
         return this.bookRepository.save( book );
     }
 }
