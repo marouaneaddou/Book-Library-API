@@ -25,7 +25,6 @@ The API provides CRUD operations for books and authors and manages the relations
 - Global exception handling
 - Business rule validation
 - PostgreSQL persistence
-- Application logging
 
 ## API Endpoints
 
