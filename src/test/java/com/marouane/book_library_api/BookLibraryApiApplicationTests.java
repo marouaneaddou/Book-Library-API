@@ -1,4 +1,4 @@
-package com.marouane.book_library_api;
+package com.marouane.library;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
