@@ -3,6 +3,8 @@ package com.marouane.book_library_api.exceptions;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.http.ResponseEntity;
 import com.marouane.book_library_api.exceptions.ErrorResponse;
 import com.marouane.book_library_api.exceptions.NotFoundException;
@@ -48,7 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler( MethodArgumentNotValidException.class )
-    public ResponseEntity<Map<String, Object>> handleConflit( MethodArgumentNotValidException ex, 
+    public ResponseEntity<Map<String, Object>> handleValidationFaild( MethodArgumentNotValidException ex, 
             HttpServletRequest request) {
             
             Map<String, String> fieldErrors = new HashMap<>();
@@ -68,6 +70,42 @@ public class GlobalExceptionHandler {
             return ResponseEntity
                 .status(  HttpStatus.BAD_REQUEST.value() )
                 .body( response );
+    }
+
+    @ExceptionHandler( HttpMessageNotReadableException.class )
+    public ResponseEntity<ErrorResponse> handleInvalidJson( HttpMessageNotReadableException ex, 
+            HttpServletRequest request) {
+            
+                return this.builderResponse( 
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid request body",
+                    request.getRequestURI()
+                );
+    }
+
+    @ExceptionHandler( HttpRequestMethodNotSupportedException.class )
+    public ResponseEntity<ErrorResponse> handleMethodNotSupported( HttpRequestMethodNotSupportedException ex, 
+            HttpServletRequest request) {
+            
+                return this.builderResponse( 
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "HTTP method not allowed",
+                    request.getRequestURI()
+                );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleUnexpectedException(
+        Exception ex,
+        HttpServletRequest request ) {
+            System.out.println(
+                "Unexpected error while processing {}"
+            );
+            return builderResponse( 
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error",
+                request.getRequestURI()
+            );
     }
 
     private ResponseEntity<ErrorResponse> builderResponse( 
