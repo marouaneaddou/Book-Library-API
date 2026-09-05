@@ -56,7 +56,7 @@ public class BookService {
         return book;
     }
 
-    public boolean isExists( String isbn ) {
+    public boolean exists( String isbn ) {
         return this.bookRepository.existsById( isbn );
     }
 

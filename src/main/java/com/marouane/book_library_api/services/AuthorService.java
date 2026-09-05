@@ -48,7 +48,7 @@ public class AuthorService {
         return this.authorRepository.save( author );
     }
 
-    public boolean isExists( Long id ) {
+    public boolean exists( Long id ) {
         return this.authorRepository.existsById( id );
     }
 

@@ -69,7 +69,7 @@ public class BookController {
         @Valid @RequestBody UpdateBookRequest updateBook ) {
 
         // check book is exists
-        Boolean bookExists = this.bookService.isExists( isbn );
+        Boolean bookExists = this.bookService.exists( isbn );
         if ( !bookExists ) throw new NotFoundException( "Book not found" );
         // check author if exist
         // Boolean authorExists = this.authorService.isExists( updateBook.getAuthorId() );
@@ -84,7 +84,7 @@ public class BookController {
     public BookResponseDetailsDto partialBook( @PathVariable("isbn") String isbn,
         @Valid @RequestBody PartialUpdateRequest request ) {
             // find book exists or not 
-            boolean exists = this.bookService.isExists( isbn );
+            boolean exists = this.bookService.exists( isbn );
             if ( !exists ) throw new NotFoundException( "Book does not exists");
             BookEntity updateBook = this.bookService.partialUpdate( this.bookMapper.toCommand( isbn, request ) );
             return this.bookMapper.toDetailsResponse( updateBook );
