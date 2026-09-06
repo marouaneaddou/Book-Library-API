@@ -103,7 +103,7 @@ DB_PASSWORD=your_password
 ## How to Run
 
 ### Requirements
-* Java 17+
+* Java 21
 * PostgreSQL
 * Maven
 
